@@ -1,3 +1,4 @@
+  
 const db = require('../../utils/db')
 const util = require('../../utils/util')
 
@@ -13,12 +14,13 @@ Page({
   getProductDetail(id) {
     wx.showLoading({
       title: 'Loading...',
-    }),
+    })
 
     db.getProductDetail(id).then(result => {
       wx.hideLoading()
 
       const data = result.result
+
       // get 2 digits price
       data.price = util.formatPrice(data.price)
 
@@ -41,7 +43,7 @@ Page({
     })
   },
 
-  buy(){
+  buy() {
     wx.showLoading({
       title: 'Purchasing...',
     })
@@ -54,6 +56,32 @@ Page({
     db.addToOrder({
       list: [productToBuy]
     }).then(result => {
+      wx.hideLoading()
+
+      const data = result.result
+
+      if (data) {
+        wx.showToast({
+          title: 'Succeed'
+        })
+      }
+    }).catch(err => {
+      console.error(err)
+      wx.hideLoading()
+
+      wx.showToast({
+        icon: 'none',
+        title: 'Failed'
+      })
+    })
+  },
+
+  addToCart() {
+    wx.showLoading({
+      title: 'Loading...',
+    })
+
+    db.addToCart(this.data.product).then(result => {
       wx.hideLoading()
 
       const data = result.result

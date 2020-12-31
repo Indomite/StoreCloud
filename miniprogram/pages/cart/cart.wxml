@@ -1,4 +1,5 @@
 <!--pages/cart/cart.wxml-->
+<image src='/images/bg.png' class='bg'></image>
 <view wx:if="{{!userInfo}}">
   <login bindonLogin="onTapLogin"></login>
 </view>
@@ -11,18 +12,18 @@
 
   <view class="cart-top">
     <view class="cart-total">
-      <view class="cart-check-wrapper white {{isSelectAllChecked ? 'check' : ''}}">
+      <view class="cart-check-wrapper white {{isSelectAllChecked ? 'check' : ''}}" bindtap="onTapCheck" data-id="selectAll">
         <image class="cart-check" src="/images/check.png" wx:if="{{isSelectAllChecked}}"></image>
       </view>
       <view class="cart-total-text">Select All</view>
     </view>
-    <view class="cart-edit">{{isCartEdit ? 'Done' : 'Edit'}}</view>
+    <view class="cart-edit" bindtap='onTapEditCart'>{{isCartEdit ? 'Done' : 'Edit'}}</view>
   </view>
 
 </view>
 <scroll-view class="product-list" scroll-y scroll-with-animation enable-back-to-top>
     <view class="product-card" wx:for="{{cartList}}" wx:key="productId">
-      <view class="cart-check-wrapper {{cartCheckMap[item.productId] ? 'check' : ''}}">
+      <view class="cart-check-wrapper {{cartCheckMap[item.productId] ? 'check' : ''}}" bindtap="onTapCheck" data-id="{{item.productId}}">
         <image class="cart-check" src="/images/check.png" wx:if="{{cartCheckMap[item.productId]}}"></image>
       </view>
       <image class="product-img" mode="aspectFit" src="{{item.image}}"></image>
@@ -30,9 +31,9 @@
         <view class="product-name">{{item.name}}</view>
         <view class="product-price">$ {{item.price}}</view>
         <view class="product-count-edit" wx:if="{{isCartEdit}}">
-          <view class="count-minus">-</view>
+          <view class="count-minus" bindtap="adjustCartProductCount" data-type="minus" data-id="{{item.productId}}">-</view>
           <view class="count-now">{{item.count}}</view>
-          <view class="count-add">+</view>
+          <view class="count-add" bindtap="adjustCartProductCount" data-type="add" data-id="{{item.productId}}">+</view>
         </view>
         <view class="product-count" wx:else>x {{item.count}}</view>
       </view>
@@ -41,11 +42,11 @@
 
   <view class="cart-checkout">
     <view class="cart-total">
-      <view class="cart-check-wrapper {{isSelectAllChecked ? 'check' : ''}}">
+      <view class="cart-check-wrapper white {{isSelectAllChecked ? 'check' : ''}}" bindtap="onTapCheck" data-id="selectAll">
         <image class="cart-check" src="/images/check.png" wx:if="{{isSelectAllChecked}}"></image>
       </view>
       <view class="cart-total-text">Select All</view>
     </view>
     <view class="cart-checkout-text"><text>Total</text><text class="cart-checkout-now">$ {{cartTotal}}</text></view>
-    <view class="pay-btn {{cartTotal>0 ? 'pay-avalible' : ''}}">Checkout</view>
+    <view class="pay-btn {{cartTotal ? 'pay-available' : ''}}" bindtap="onTapCheckout">Checkout</view>
   </view>

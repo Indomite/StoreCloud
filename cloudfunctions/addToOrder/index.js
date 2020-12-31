@@ -8,6 +8,7 @@ exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const user = wxContext.OPENID
   const productList = event.list || []
+  const isCheckout = !!event.isCheckout
   await db.collection('order').add({
     data: {
       user,
@@ -16,5 +17,11 @@ exports.main = async (event, context) => {
     },
   })
 
+  if (isCheckout) {
+    // if it's checked out from cart
+    await db.collection('cart').where({
+      productId: db.command.in(productList.map(product => product.productId))
+    }).remove()
+  }
   return {}
 }
