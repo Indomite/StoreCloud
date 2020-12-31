@@ -1,4 +1,6 @@
 // pages/me/me.js
+const util = require('../../utils/util')
+
 Page({
 
   /**
@@ -8,11 +10,31 @@ Page({
     userInfo: null,
   },
 
+  onTapLogin(event) {
+    this.setData({
+      userInfo: event.detail.userInfo
+    })
+  },
+
+  onTapAddress() {
+    wx.showToast({
+      icon: 'none',
+      title: 'This function is not open yet.'
+    })
+  },
+
+  onTapService() {
+    wx.showToast({
+      icon: 'none',
+      title: 'This function is not open yet.'
+    })
+  },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    
   },
 
   /**
@@ -26,7 +48,13 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    util.getUserInfo().then(userInfo => {
+      this.setData({
+        userInfo
+      })
+    }).catch(err => {
+      console.log('Not Authenticated yet');
+    })
   },
 
   /**
